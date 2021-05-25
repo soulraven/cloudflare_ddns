@@ -1,0 +1,13 @@
+[Unit]
+Description=Cloudflare Dynamic DNS daemon
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/opt/cloudflare_ddns
+Type=simple
+Restart=always
+User=cfddns
+ExecStart=/usr/bin/python3 /opt/cloudflare_ddns/main.py
+
+[Install]
+WantedBy=multi-user.target
