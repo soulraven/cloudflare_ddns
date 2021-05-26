@@ -53,6 +53,9 @@ CF_IPV6 = True
 
 CF_IPV4 = True
 
+# Cloudflare default TTL
+CF_DEFAULT_TTL = 300
+
 ###########################
 # Cloudflare zone API URL #
 ###########################
