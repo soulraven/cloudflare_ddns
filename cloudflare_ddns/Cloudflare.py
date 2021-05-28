@@ -70,14 +70,16 @@ class Cloudflare(object):
             else:
                 raise ImproperlyConfigured("The email for api key is missing from configuration")
 
-    # def __call__(self, zone, record, ttl, proxied):
-    #     zone_id = self.zones(zone)['result'][0]['id']
-    #     record_id = self.dns_records(zone_id, record)['result'][0]['id']
-    #     ip_address = get_cf_ipv6()
-    #     if ip_address != self.dns_records(zone_id, record)['result'][0]['content']:
-    #         return self.update_record(zone_id, record_id, record, ttl, ip_address, proxied)
-    #     else:
-    #         return "Record is up-to-date"
+    def __call__(self, subdomain, record_type, ttl, proxied):
+        """
+
+        :param subdomain:
+        :param subdomain:
+        :param ttl:
+        :param proxied:
+        :return:
+        """
+        self.update_record(subdomain=subdomain, record_type=record_type, ttl=ttl, proxied=proxied)
 
     def query_api(self, endpoint, method: str = "GET", json_body=None, params=None, cur_page: int = 1,
                   timeout: float = 6.0):
@@ -112,6 +114,7 @@ class Cloudflare(object):
         else:
             log.error("📈 Error sending '" + method + "' request to '" + response.url + "': " + response.text)
             errors = [x.get("message") for x in response.json().get("errors")]
+            errors.append(json_body)
             for e in [x for x in errors if x]:
                 log.error(e)
             return None
@@ -167,7 +170,8 @@ class Cloudflare(object):
             'A': {},
             'AAAA': {}
         }
-        dns_records_response = self.query_api(getattr(settings, 'CLOUDFLARE_ZONE_DNS_RECORDS_QUERY_API').format(zone_id=zone_id))
+        dns_records_response = self.query_api(
+            getattr(settings, 'CLOUDFLARE_ZONE_DNS_RECORDS_QUERY_API').format(zone_id=zone_id))
 
         for dns_record in dns_records_response['result']:
             dns_type = dns_record['type']
@@ -179,7 +183,8 @@ class Cloudflare(object):
 
         return dns_records
 
-    def update_record(self, subdomain, record_type='A', ip_address=None, ttl=1, proxied=True):
+    def update_record(self, subdomain, record_type='A', ip_address=None, ttl=settings.CF_DEFAULT_TTL,
+                      proxied=settings.CF_PROXIED):
         """
 
         :param subdomain:

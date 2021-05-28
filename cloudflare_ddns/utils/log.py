@@ -93,6 +93,11 @@ DEFAULT_LOGGING = {
             'propagate': False,
 
         },
+        'schedule': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
     }
 }
 

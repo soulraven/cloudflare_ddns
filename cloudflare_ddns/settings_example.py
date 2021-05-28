@@ -34,8 +34,23 @@
 
 DEBUG = True
 
-# Cloudflare account domains
-CF_DOMAINS = ['progeek.ro']
+# Cloudflare account domains that will update DNS records
+CF_SUBDOMAINS = [
+    {
+        'dns_record': 'subdomain-1.domain.tld',
+        'record_type': 'AAAA',
+        'ttl': 1,
+        'proxied': False,
+        'state': True
+    },
+    {
+        'dns_record': 'subdomain-2.domain.tld',
+        'record_type': 'A',
+        'ttl': 1,
+        'proxied': False,
+        'state': True
+    }
+]
 
 # Cloudflare API authentication type. Permitted token or key
 CF_AUTH_TYPE = 'token'
@@ -49,12 +64,6 @@ CF_API_KEY = '<some api key>'
 # Cloudflare email account
 CF_EMAIL = '<some email account for cloudflare>'
 
-CF_IPV6 = True
-
-CF_IPV4 = True
-
-# Cloudflare default TTL
-CF_DEFAULT_TTL = 300
 
 ###########################
 # Cloudflare zone API URL #

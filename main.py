@@ -21,6 +21,8 @@ import time
 import logging
 import threading
 
+import schedule
+
 from cloudflare_ddns.conf import settings
 from cloudflare_ddns.utils.log import configure_logging
 # from libs.utils import load_arguments, load_conf
@@ -28,17 +30,48 @@ from cloudflare_ddns.utils.log import configure_logging
 
 from cloudflare_ddns.Cloudflare import Cloudflare
 
-logger = logging.getLogger('cf_logging')
+log = logging.getLogger('cf_logging')
+schedule_logger = logging.getLogger('schedule')
 
 
-def main():
+def cloudflare_job(**kwargs):
+    """
 
+    :param kwargs:
+    :return:
+    """
     cf = Cloudflare()
+    cf(subdomain=kwargs['dns_record'], record_type=kwargs['record_type'], ttl=kwargs['ttl'], proxied=kwargs['proxied'])
+
+
+def cloudflare_generator():
+    while True:
+        for x in settings.CF_SUBDOMAINS:
+            run_threaded(cloudflare_job, **x)
+            yield
+
+
+generator_job = cloudflare_generator()
+
+
+def run_threaded(job_func, **kwargs):
+    job_thread = threading.Thread(target=job_func, kwargs=kwargs)
+    job_thread.daemon = True
+    job_thread.name = kwargs['dns_record']
+    job_thread.start()
+    job_thread.join()
 
 
 if __name__ == '__main__':
+    log.info("Start the Cloudflare DDNS script")
+
+    schedule.every(5).seconds.do(lambda: next(generator_job))
 
     try:
-        main()
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
     except KeyboardInterrupt:
+        schedule.clear()
+        log.warning("Cloudflare DDNS script interrupted")
         sys.exit(1)
