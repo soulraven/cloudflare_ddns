@@ -47,8 +47,9 @@ def cloudflare_job(**kwargs):
 def cloudflare_generator():
     while True:
         for x in settings.CF_SUBDOMAINS:
-            run_threaded(cloudflare_job, **x)
-            yield
+            if x.state:
+                run_threaded(cloudflare_job, **x)
+                yield
 
 
 generator_job = cloudflare_generator()
@@ -65,7 +66,7 @@ def run_threaded(job_func, **kwargs):
 if __name__ == '__main__':
     log.info("Start the Cloudflare DDNS script")
 
-    schedule.every(5).seconds.do(lambda: next(generator_job))
+    schedule.every(settings.SCHEDULE_DELAY_TASKS).seconds.do(lambda: next(generator_job))
 
     try:
         while True:

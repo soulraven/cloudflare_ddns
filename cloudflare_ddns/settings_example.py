@@ -93,6 +93,13 @@ EXTERNAL_IPV4_QUERY_APIS = [
     'https://api.simonpainter.com/ip/'
 ]
 
+#############################
+# Global settings           #
+#############################
+
+# how many seconds each task will be delayed from the next task
+SCHEDULE_DELAY_TASKS = 30 * 60
+
 ###########
 # LOGGING #
 ###########
