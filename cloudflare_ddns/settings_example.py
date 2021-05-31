@@ -47,18 +47,28 @@ CF_API_KEY = '<some api key>'
 # Cloudflare email account
 CF_EMAIL = '<some email account for cloudflare>'
 
+# Time to live for DNS record. Value of 1 is 'automatic'
+CF_DEFAULT_TTL = 300
+
+# Whether the record is receiving the performance and security benefits of Cloudflare
+CF_PROXIED = True
 
 ###########################
 # Cloudflare zone API URL #
 ###########################
-
-CLOUDFLARE_ZONE_QUERY_API = 'https://api.cloudflare.com/client/v4'  # GET
+# The stable base URL for all Version 4 HTTPS endpoints
+CLOUDFLARE_ENDPOINT_API = 'https://api.cloudflare.com/client/v4'  # GET
+CLOUDFLARE_USER_API = 'https://api.cloudflare.com/client/v4/user'  # GET
+CLOUDFLARE_ZONE_API = 'https://api.cloudflare.com/client/v4/zones'  # GET
 CLOUDFLARE_ZONE_DNS_RECORDS_QUERY_API = 'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records'  # GET
-CLOUDFLARE_ZONE_DNS_RECORDS_UPDATE_API = 'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{dns_record_id}'  # PATCH
+CLOUDFLARE_ZONE_DNS_RECORDS_UPDATE_API = 'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{' \
+                                         'dns_record_id}'  # PATCH
 
 #############################
 # External IP query API's #
 #############################
+
+QUERY_CF_FOR_EXTERNAL_IP = True
 
 # Cloudflare api service that returns IPv6 IP
 EXTERNAL_CF_IPV6_QUERY_API = 'https://[2606:4700:4700::1111]/cdn-cgi/trace'
