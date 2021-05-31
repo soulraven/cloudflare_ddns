@@ -47,7 +47,7 @@ def cloudflare_job(**kwargs):
 def cloudflare_generator():
     while True:
         for x in settings.CF_SUBDOMAINS:
-            if x.state:
+            if x.get('state'):
                 run_threaded(cloudflare_job, **x)
                 yield
 
