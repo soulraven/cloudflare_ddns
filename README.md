@@ -31,7 +31,7 @@ Contributions of all forms are welcome :)
 
 ## 🗒 License
 
-This Template is licensed under the GNU General Public License, version 3 (GPLv3).
+This repository is licensed under the GNU General Public License, version 3 (GPLv3).
 
 ## 👀 Author
 
